@@ -14,3 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'HomeController@index');
+Route::get('/dashboard', 'DashboardController@index');
+Route::post('/', 'LoginController@authenticate');

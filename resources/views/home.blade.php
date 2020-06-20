@@ -1,10 +1,10 @@
 @extends('master')
 
-@section('title', 'Home')
+@section('title', 'Login')
 
 @section('content')
 
-<form class="form-login text-center">
+<form class="form-login text-center" method="post">
     <h1><i class="i-logo fas fa-stream"></i></h1>
     <h1 class="h3 mb-3 ont-weight-normal">Logbook</h1>
     <label for="inputEmail" class="sr-only">Email</label>
