@@ -1,6 +1,9 @@
-//
-.i-logo {
-    color: #8e2cbf;
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+
+.brand-icon {
+    color: #8D34BC;
 }
 
 .form-login {
@@ -10,13 +13,13 @@
     margin: auto;
 }
 
-.form-login input[type="email"] {
+.form-login [type="email"] {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
-.form-login input[type="password"] {
-  margin-bottom: 20px;
+.form-login [type="password"] {
+  margin-bottom: 15px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
