@@ -4,7 +4,7 @@
 
 @section('content')
 
-<form class="form-login text-center" method="post">
+<form class="form-login text-center" method="post" action="/auth">
     <h1><i class="i-logo fas fa-stream"></i></h1>
     <h1 class="h3 mb-3 ont-weight-normal">Logbook</h1>
     <label for="inputEmail" class="sr-only">Email</label>
@@ -13,6 +13,7 @@
     <input type="password" id="inputPassword" class="form-control" placeholder="Passwort" required>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
     <a href="#" class="btn btn-lg btn-secondary btn-block">Account erstellen</a>
+    @csrf
 </form>
 
 @endsection
