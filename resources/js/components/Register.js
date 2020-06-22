@@ -47,7 +47,7 @@ class Register extends Component {
         
         axios.post('/api/auth/register', credentials)
             .then(response => {
-                this.props.authCallback(response);
+                this.props.onAuth(response.data);
             })
             .catch(error => {
                 console.log(error);

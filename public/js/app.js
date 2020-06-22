@@ -83467,6 +83467,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Register__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Register */ "./resources/js/components/Register.js");
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -83508,28 +83510,40 @@ var App = /*#__PURE__*/function (_Component) {
       logged_in: false,
       user: {}
     };
+    _this.authCallback = _this.authCallback.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(App, [{
     key: "authCallback",
     value: function authCallback(response) {
-      this.state.logged_in = true;
+      this.setState({
+        logged_in: true
+      }); //todo: save user token
+
       console.log(response);
     }
   }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       if (!this.state.logged_in) {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["BrowserRouter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Switch"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
           exact: true,
           path: "/",
-          component: _Login__WEBPACK_IMPORTED_MODULE_3__["default"],
-          handleLogin: this.authCallback.bind(this)
+          render: function render(props) {
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Login__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({}, props, {
+              onAuth: _this2.authCallback
+            }));
+          }
         }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Route"], {
           path: "/register",
-          component: _Register__WEBPACK_IMPORTED_MODULE_4__["default"],
-          handleLogin: this.authCallback.bind(this)
+          render: function render(props) {
+            return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Register__WEBPACK_IMPORTED_MODULE_4__["default"], _extends({}, props, {
+              onAuth: _this2.authCallback
+            }));
+          }
         })));
       } else {
         return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Dashboard");
@@ -83641,7 +83655,7 @@ var Login = /*#__PURE__*/function (_Component) {
         password: this.state.password
       };
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/auth/login', credentials).then(function (response) {
-        _this2.props.authCallback(response);
+        _this2.props.onAuth(response);
       })["catch"](function (error) {
         console.log(error);
 
@@ -83806,7 +83820,7 @@ var Register = /*#__PURE__*/function (_Component) {
         password_confirmation: this.state.password_confirmation
       };
       axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/auth/register', credentials).then(function (response) {
-        _this2.props.authCallback(response);
+        _this2.props.onAuth(response);
       })["catch"](function (error) {
         console.log(error);
 

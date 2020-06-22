@@ -13,7 +13,7 @@ class Login extends Component {
     constructor (props) {
         super(props);
         this.state = {
-          email: '',
+          email: localStorage.getItem('email') || '',
           password: '',
           error: ''
       };
@@ -43,7 +43,7 @@ class Login extends Component {
         
         axios.post('/api/auth/login', credentials)
             .then(response => {
-                this.props.authCallback(response);
+                this.props.onAuth(response.data);
             })
             .catch(error => {
                 console.log(error);

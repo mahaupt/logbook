@@ -12,11 +12,22 @@ class App extends Component
             logged_in: false,
             user: {}
         };
+        
+        this.authCallback = this.authCallback.bind(this);
     }
     
-    authCallback(response) {
-        this.state.logged_in = true;
-        console.log(response);
+    authCallback(data) {
+        this.setState({
+            logged_in: true, 
+            user: {
+                name: data.name,
+                email: data.email, 
+                access_token: data.access_token
+            }
+        });
+        
+        localStorage.setItem('email', data.email);
+        localStorage.setItem('access_token', data.access_token);
     }
   
   
@@ -25,10 +36,10 @@ class App extends Component
             return (
                 <BrowserRouter>
                   <Switch>
-                    <Route exact path='/' component={Login} 
-                        handleLogin={this.authCallback.bind(this)} />
-                    <Route path='/register' component={Register} 
-                        handleLogin={this.authCallback.bind(this)} />
+                    <Route exact path='/' 
+                        render={(props) => <Login {...props} onAuth={this.authCallback} />} />
+                    <Route path='/register' 
+                        render={(props) => <Register {...props} onAuth={this.authCallback} />} />
                   </Switch>
                 </BrowserRouter>
             );
