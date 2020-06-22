@@ -9,12 +9,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStream } from '@fortawesome/free-solid-svg-icons'
 
 
-class Login extends Component {
+class Register extends Component {
     constructor (props) {
         super(props);
         this.state = {
+          name: '',
           email: '',
           password: '',
+          password_confirmation: '', 
           error: ''
       };
       
@@ -37,11 +39,13 @@ class Login extends Component {
         event.preventDefault();
         
         const credentials = {
+            name: this.state.name, 
             email: this.state.email,
-            password: this.state.password
+            password: this.state.password, 
+            password_confirmation: this.state.password_confirmation
         };
         
-        axios.post('/api/auth/login', credentials)
+        axios.post('/api/auth/register', credentials)
             .then(response => {
                 this.props.authCallback(response);
             })
@@ -63,15 +67,18 @@ class Login extends Component {
         return (
             <Form className="form-login text-center" onSubmit={this.handleLogin}>
                 <h1><FontAwesomeIcon className="brand-icon" icon={ faStream } /></h1>
-                <h1 className="h3 mb-3 ont-weight-normal">Logbook</h1>
+                <h1 className="h3 mb-3 ont-weight-normal">Account erstellen</h1>
                 
-                <Form.Control className="corner-top" type="email" name="email" value={this.state.email} placeholder="Email" onChange={this.handleChange} required />
+                <Form.Control className="corner-top" type="text" name="name" value={this.state.name} placeholder="Vor- und Nachname" onChange={this.handleChange} required />
                 
-                <Form.Control className="corner-bottom" type="password" name="password" value={this.state.password} placeholder="Passwort" onChange={this.handleChange} required />
+                <Form.Control className="corner-middle" type="email" name="email" value={this.state.email} placeholder="Email" onChange={this.handleChange} required />
                 
-                <Button type="submit" variant="primary" size="lg" block>Login</Button>
+                <Form.Control className="corner-middle" type="password" name="password" value={this.state.password} placeholder="Passwort" onChange={this.handleChange} required />
                 
-                <Link to="/register" className="button-link"><Button variant="secondary" size="lg" block>Account erstellen</Button></Link>
+                <Form.Control className="corner-bottom" type="password" name="password_confirmation" value={this.state.password_confirmation} placeholder="Passwort Wdh." onChange={this.handleChange} required />
+        
+                <Button type="submit" variant="primary" size="lg" block>Account erstellen</Button>
+                <Link to="/" className="button-link"><Button variant="secondary" size="lg" block>Zurück</Button></Link>
                 
                 {this.renderError()}
             </Form>
@@ -79,4 +86,4 @@ class Login extends Component {
     }
 }
 
-export default Login
+export default Register

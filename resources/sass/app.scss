@@ -13,12 +13,19 @@
     margin: auto;
 }
 
-.form-login [type="email"] {
+.form-login .corner-top {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
-.form-login [type="password"] {
+.form-login .corner-middle {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.form-login .corner-bottom {
   margin-bottom: 15px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
@@ -26,4 +33,11 @@
 
 .form-login .alert {
     margin-top: 10px;
+}
+
+.button-link:hover {
+    text-decoration: none;
+}
+Button {
+    margin-bottom: 10px;
 }
