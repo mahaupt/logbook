@@ -10951,3 +10951,7 @@ a.text-dark:focus {
   border-top-right-radius: 0;
 }
 
+.form-login .alert {
+  margin-top: 10px;
+}
+

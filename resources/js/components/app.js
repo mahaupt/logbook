@@ -1,23 +1,28 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faStream } from '@fortawesome/free-solid-svg-icons'
+import Login from './Login'
 
 class App extends Component
 {
+    constructor (props) {
+        super(props);
+        this.state = {
+          loggedIn: false,
+          user: {}
+      };
+    }
+  
+  
     render() {
-        return (
-            <Form className="form-login text-center">
-                <h1><FontAwesomeIcon className="brand-icon" icon={ faStream } /></h1>
-                <h1 className="h3 mb-3 ont-weight-normal">Logbook</h1>
-                <Form.Control type="email" placeholder="Email" required />
-                <Form.Control type="password" placeholder="Passwort" required />
-                <Button variant="primary" size="lg" block>Login</Button>
-                <Button variant="secondary" size="lg" block>Account erstellen</Button>
-            </Form>
-        )
+        if (!this.state.loggedIn) {
+            return (
+                <Login />
+            );
+        } else {
+            return (
+                <h1>Dashboard</h1>
+            )
+        }
     }
 }
 

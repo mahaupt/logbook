@@ -5,4 +5,4 @@
  */
 
 require('./bootstrap');
-require('./components/app');
+require('./components/App');
