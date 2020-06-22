@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import axios from 'axios'
 import Login from './Login'
 import Register from './Register'
+import Dashboard from './Dashboard'
 
 class App extends Component
 {
@@ -13,7 +15,42 @@ class App extends Component
             user: {}
         };
         
+        var token = localStorage.getItem('access_token') || false;
+        if (token) {
+            this.getUserdata(token);
+        }
+        
         this.authCallback = this.authCallback.bind(this);
+        this.logoutCallback = this.logoutCallback.bind(this);
+    }
+    
+    getUserdata(token)
+    {
+        var auth_str = "Bearer ".concat(token);
+        var config = {
+            headers: {
+                'Accept': 'application/json', 
+                'Authorization': auth_str
+            }
+        }
+        
+        axios.get('/api/auth/user', config)
+            .then(response => {
+                console.log(response);
+                this.setState({
+                    logged_in: true, 
+                    user: {
+                        name: response.data.name,
+                        email: response.data.email,
+                        access_token: token
+                    }
+                });
+            })
+            .catch(error => {
+                //nothing to do
+                localStorage.removeItem('access_token');
+                console.log(error);
+            });
     }
     
     authCallback(data) {
@@ -28,6 +65,14 @@ class App extends Component
         
         localStorage.setItem('email', data.email);
         localStorage.setItem('access_token', data.access_token);
+    }
+    
+    
+    logoutCallback() {
+        this.setState({
+            logged_in: false
+        });
+        localStorage.removeItem('access_token');
     }
   
   
@@ -45,7 +90,7 @@ class App extends Component
             );
         } else {
             return (
-                <h1>Dashboard</h1>
+                <Dashboard user={this.state.user} onLogout={this.logoutCallback} />
             )
         }
     }

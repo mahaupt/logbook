@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Auth;
 class AuthController extends Controller
 {
     //
+    public function index(Request $request)
+    {
+        return response()->json($request->user());
+    }
+    
     
     public function login(Request $request)
     {
@@ -27,10 +32,10 @@ class AuthController extends Controller
         }
         
         $user = $request->user();
-        $tokenResult = $user->createToken('Personal Access Token');
-        $token = $tokenResult->token;
+        $tokenResult = $user->createToken('webapp');
+        /*$token = $tokenResult->token;
         $token->expires_at = Carbon::now()->addWeeks(1);
-        $token->save();
+        $token->save();*/
         
         return response()->json([
             'success' => true,
