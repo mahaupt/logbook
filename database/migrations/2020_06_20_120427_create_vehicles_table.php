@@ -17,9 +17,9 @@ class CreateVehiclesTable extends Migration
             $table->id();
             $table->text('name');
             $table->text('bike_id');
-            $table->integer('drives');
-            $table->integer('sum_time');
-            $table->double('sum_distance');
+            $table->integer('drives')->default(0);
+            $table->integer('sum_time')->default(0);
+            $table->double('sum_distance')->default(0);
             $table->timestamps();
         });
     }

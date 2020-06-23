@@ -9,26 +9,43 @@ class VehicleController extends Controller
     //
     public function index(Request $request)
     {
-        
-    }
-    
-    public function show(Request $request)
-    {
-        
-    }
-    
-    public function edit(Request $request)
-    {
-        
+        $user = $request->user();
+        return response()->json($user->vehicles(), 200);
     }
     
     public function create(Request $request)
     {
+        $user = $request->user();
+        $vehicle = new Vehicle;
+        $vehicle->name = $request->name;
+        $vehicle->bike_id = $request->bike_id;
+        $vehicle->save();
         
+        $user->vehicles()->attach($vehicle, ['role' => 'admin']);
+        
+        return response()->json(['success' => true], 201);
     }
     
-    public function delete(Request $request)
+    public function show(Request $request, $id)
     {
-        
+        $user = $request->user();
+        return response()->json($user->vehicles()->findOrFail($id), 200);
+    }
+    
+    public function edit(Request $request, $id)
+    {
+        $user = $request->user();
+        $vehicle = $user->adminVehicles()->findOrFail($id);
+        $vehicle->name = $request->name;
+        $vehicle->bike_id = $request->bike_id;
+        $vehicle->save();
+        return response()->json(['success' => true], 201);
+    }
+    
+    public function delete(Request $request, $id)
+    {
+        $user = $request->user();
+        $user->adminVehicles()->findOrFail($id)->delete();
+        return response()->json(['success' => true], 201);
     }
 }

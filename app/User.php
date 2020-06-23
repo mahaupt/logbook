@@ -38,9 +38,23 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
+    public function logs()
+    {
+        return $this->hasMany('App\Log');
+    }
     
     public function vehicles()
     {
         return $this->belongsToMany('App\Vehicle', 'vehicle_role')->withPivot('role');
+    }
+    
+    public function adminVehicles()
+    {
+        return $this->belongsToMany('App\Vehicle', 'vehicle_role')->wherePivot('role', 'admin');
+    }
+    
+    public function userVehicles()
+    {
+        return $this->belongsToMany('App\Vehicle', 'vehicle_role')->wherePivot('role', 'user');
     }
 }

@@ -39,8 +39,8 @@ Route::group([
     Route::post('vehicle/{id}', 'VehicleController@edit');
     Route::delete('vehicle/{id}', 'VehicleController@delete');
     
-    Route::get('logs', 'LogController@index');
-    Route::put('log', 'LogController@create');
+    Route::get('logs/{vid}', 'LogController@index');
+    Route::put('log/{vid}', 'LogController@create');
     Route::get('log/{id}', 'LogController@show');
     Route::post('log/{id}', 'LogController@edit');
     Route::delete('log/{id}', 'LogController@delete');
