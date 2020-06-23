@@ -6,6 +6,7 @@ import Login from './Login'
 import Register from './Register'
 import Dashboard from './Dashboard'
 
+
 class App extends Component
 {
     constructor (props) {
@@ -17,26 +18,19 @@ class App extends Component
         
         var token = localStorage.getItem('access_token') || false;
         if (token) {
-            this.getUserdata(token);
+            this.getUserdata();
         }
         
         this.authCallback = this.authCallback.bind(this);
         this.logoutCallback = this.logoutCallback.bind(this);
     }
     
+    
+    
     getUserdata(token)
-    {
-        var auth_str = "Bearer ".concat(token);
-        var config = {
-            headers: {
-                'Accept': 'application/json', 
-                'Authorization': auth_str
-            }
-        }
-        
-        axios.get('/api/auth/user', config)
+    {    
+        axios.get('/api/auth/user')
             .then(response => {
-                console.log(response);
                 this.setState({
                     logged_in: true, 
                     user: {

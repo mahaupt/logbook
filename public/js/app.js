@@ -83433,6 +83433,15 @@ try {
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.interceptors.request.use(function (config) {
+  var token = localStorage.getItem('access_token') || false;
+
+  if (token) {
+    config.headers.Authorization = 'Bearer ' + token;
+  }
+
+  return config;
+});
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -83518,7 +83527,7 @@ var App = /*#__PURE__*/function (_Component) {
     var token = localStorage.getItem('access_token') || false;
 
     if (token) {
-      _this.getUserdata(token);
+      _this.getUserdata();
     }
 
     _this.authCallback = _this.authCallback.bind(_assertThisInitialized(_this));
@@ -83531,16 +83540,7 @@ var App = /*#__PURE__*/function (_Component) {
     value: function getUserdata(token) {
       var _this2 = this;
 
-      var auth_str = "Bearer ".concat(token);
-      var config = {
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': auth_str
-        }
-      };
-      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/auth/user', config).then(function (response) {
-        console.log(response);
-
+      axios__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/auth/user').then(function (response) {
         _this2.setState({
           logged_in: true,
           user: {
@@ -83626,6 +83626,8 @@ react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render( /*#__PURE__*/react__WEB
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -83650,21 +83652,44 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 
 
 
+
 var Dashboard = /*#__PURE__*/function (_Component) {
   _inherits(Dashboard, _Component);
 
   var _super = _createSuper(Dashboard);
 
-  function Dashboard() {
+  function Dashboard(props) {
+    var _this;
+
     _classCallCheck(this, Dashboard);
 
-    return _super.apply(this, arguments);
+    _this = _super.call(this, props);
+    _this.state = {
+      vehicles: []
+    };
+    return _this;
   }
 
   _createClass(Dashboard, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/api/vehicles').then(function (response) {
+        _this2.setState({
+          vehicles: response.data
+        });
+      })["catch"](function (error) {
+        alert(error);
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Hallo ", this.props.user.name);
+      var vehicles = this.state.vehicles;
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "Hallo ", this.props.user.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("strong", null, "Deine Fahrzeuge:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("ul", null, vehicles.map(function (vehicle) {
+        return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("li", null, vehicle.name, " - (", vehicle.bike_id, ")");
+      })));
     }
   }]);
 

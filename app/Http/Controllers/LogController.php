@@ -11,13 +11,13 @@ class LogController extends Controller
     {
         $user = $request->user();
         $vehicle = $user->vehicles()->findOrFail($id);
-        return response()->json($vehicle->logs(), 200);
+        return response()->json($vehicle->logs()->get(), 200);
     }
     
     public function index(Request $request)
     {
         $user = $request->user();
-        return response()->json($user->logs(), 200);
+        return response()->json($user->logs()->get(), 200);
     }
     
     public function create(Request $request, $vid)
@@ -29,7 +29,7 @@ class LogController extends Controller
         $log->finish = $request->finish;
         $log->time = $request->time;
         $log->distance = $request->distance;
-        $log->user()->assosiate($user);
+        $log->user()->associate($user);
         $log->vehicle()->associate($vehicle);
         $log->save();
         

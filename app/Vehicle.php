@@ -10,7 +10,7 @@ class Vehicle extends Model
     
     public function users()
     {
-        return $this->belongsToMany('App\User', 'vehicle_role')->withPivot('role');
+        return $this->belongsToMany('App\User', 'vehicle_roles')->withPivot('role');
     }
     
     public function logs()

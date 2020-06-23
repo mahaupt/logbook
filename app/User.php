@@ -45,16 +45,16 @@ class User extends Authenticatable
     
     public function vehicles()
     {
-        return $this->belongsToMany('App\Vehicle', 'vehicle_role')->withPivot('role');
+        return $this->belongsToMany('App\Vehicle', 'vehicle_roles')->withPivot('role');
     }
     
     public function adminVehicles()
     {
-        return $this->belongsToMany('App\Vehicle', 'vehicle_role')->wherePivot('role', 'admin');
+        return $this->belongsToMany('App\Vehicle', 'vehicle_roles')->wherePivot('role', 'admin');
     }
     
     public function userVehicles()
     {
-        return $this->belongsToMany('App\Vehicle', 'vehicle_role')->wherePivot('role', 'user');
+        return $this->belongsToMany('App\Vehicle', 'vehicle_roles')->wherePivot('role', 'user');
     }
 }
