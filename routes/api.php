@@ -38,8 +38,10 @@ Route::group([
     Route::get('vehicle/{id}', 'VehicleController@show');
     Route::post('vehicle/{id}', 'VehicleController@edit');
     Route::delete('vehicle/{id}', 'VehicleController@delete');
+
+    Route::get('vehicle/{vid}/logs', 'LogController@indexByVehicle');
     
-    Route::get('logs/{vid}', 'LogController@index');
+    Route::get('logs', 'LogController@index');
     Route::put('log/{vid}', 'LogController@create');
     Route::get('log/{id}', 'LogController@show');
     Route::post('log/{id}', 'LogController@edit');
