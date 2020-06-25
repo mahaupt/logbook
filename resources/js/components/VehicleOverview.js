@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Row, Col, Card, Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faExpandAlt, faStopwatch, faBicycle } from '@fortawesome/free-solid-svg-icons'
+import { faHashtag, faExpandAlt, faStopwatch, faBicycle, faPlus } from '@fortawesome/free-solid-svg-icons'
 
 class VehicleOverview extends Component
 {
@@ -10,6 +10,7 @@ class VehicleOverview extends Component
         super(props);
         
         this.renderContainer = this.renderContainer.bind(this);
+        this.renderNewBikeButton = this.renderNewBikeButton.bind(this);
     }
     
     renderContainer (vehicle) {
@@ -18,27 +19,45 @@ class VehicleOverview extends Component
         return (
             
             <Col key={vehicle.id} sm>
-                <Card>
-                    <Link to={linkpath} className="hidden-link">
-                        <Card.Body>
-                            <Card.Title>
-                                <FontAwesomeIcon icon={ faBicycle } />&nbsp;
-                                {vehicle.name}
-                            </Card.Title>
-                            <Card.Subtitle className="mb-2">
-                                <Badge variant="secondary">{vehicle.bike_id}</Badge>
-                            </Card.Subtitle>
-                            <Card.Text>
-                                <FontAwesomeIcon className="text-muted" icon={ faExpandAlt } /> {vehicle.sum_distance}
-                                &nbsp;&nbsp;
-                                <FontAwesomeIcon className="text-muted" icon={ faStopwatch } /> {vehicle.sum_time} h
-                            </Card.Text>
-                        </Card.Body>
-                    </Link>
-                </Card>
+              <Card className="vehicle-col">
+                <Link to={linkpath} className="hidden-link">
+                  <Card.Body>
+                    <Card.Title>
+                      <FontAwesomeIcon icon={ faBicycle } />&nbsp;
+                      {vehicle.name}
+                    </Card.Title>
+                    <Card.Subtitle className="mb-2">
+                      <Badge variant="secondary">{vehicle.bike_id}</Badge>
+                    </Card.Subtitle>
+                    <Card.Text>
+                      <FontAwesomeIcon className="text-muted" icon={ faHashtag } />
+                      {vehicle.drives}
+                      &nbsp;&nbsp;
+                      <FontAwesomeIcon className="text-muted" icon={ faExpandAlt } /> {vehicle.sum_distance} km
+                      &nbsp;&nbsp;
+                      <FontAwesomeIcon className="text-muted" icon={ faStopwatch } /> {vehicle.sum_time} h
+                    </Card.Text>
+                  </Card.Body>
+                </Link>
+              </Card>
             </Col>
             
         );
+    }
+    
+    renderNewBikeButton()
+    {
+      return (
+        <Col key='new' sm>
+          <Card className="vehicle-col">
+            <Link to="/new" className="hidden-link" style={{'margin-top': '15px'}}>
+              <Card.Body>
+                <h1 className="text-center"><FontAwesomeIcon className="text-muted" icon={ faPlus } /></h1>
+              </Card.Body>
+            </Link>
+          </Card>
+        </Col>
+      )
     }
     
     render () {
@@ -53,6 +72,7 @@ class VehicleOverview extends Component
                 {vehicles.map((vehicle) => {
                     return this.renderContainer(vehicle)
                 })}
+                {this.renderNewBikeButton()}
             </Row>
             </>
         )

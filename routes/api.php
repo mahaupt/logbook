@@ -42,6 +42,7 @@ Route::group([
     Route::get('vehicle/{vid}/logs', 'LogController@indexByVehicle');
     
     Route::get('logs', 'LogController@index');
+    Route::get('logs/{vid}', 'LogController@indexByVehicle');
     Route::put('log/{vid}', 'LogController@create');
     Route::get('log/{id}', 'LogController@show');
     Route::post('log/{id}', 'LogController@edit');

@@ -10,7 +10,7 @@ class LogController extends Controller
     public function indexByVehicle(Request $request, $vid)
     {
         $user = $request->user();
-        $vehicle = $user->vehicles()->findOrFail($id);
+        $vehicle = $user->vehicles()->findOrFail($vid);
         return response()->json($vehicle->logs()->get(), 200);
     }
     
@@ -50,7 +50,7 @@ class LogController extends Controller
         $log = null;
         try {
             $log = $user->logs()->findOrFail($id);
-        } catch() {
+        } catch(Exception $e) {
             $log = $user->adminVehicles()->logs()->findOrFail($id);
         }
         
@@ -70,7 +70,7 @@ class LogController extends Controller
         $log = null;
         try {
             $log = $user->logs()->findOrFail($id);
-        } catch() {
+        } catch(Exception $e) {
             $log = $user->adminVehicles()->logs()->findOrFail($id);
         }
         
