@@ -6,6 +6,12 @@
     color: #8D34BC;
 }
 
+.content-container {
+    width: 100%;
+    max-width: 750px;
+    margin:auto;
+}
+
 .form-login {
     width: 100%;
     max-width: 330px;
@@ -35,8 +41,12 @@
     margin-top: 10px;
 }
 
-.button-link:hover {
+.button-link:hover, .hidden-link:hover {
     text-decoration: none;
+    color: #212529;
+}
+.hidden-link {
+    color: #212529;
 }
 Button {
     margin-bottom: 10px;

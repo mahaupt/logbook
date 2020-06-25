@@ -10932,6 +10932,12 @@ a.text-dark:focus {
   color: #8D34BC;
 }
 
+.content-container {
+  width: 100%;
+  max-width: 750px;
+  margin: auto;
+}
+
 .form-login {
   width: 100%;
   max-width: 330px;
@@ -10963,8 +10969,14 @@ a.text-dark:focus {
   margin-top: 10px;
 }
 
-.button-link:hover {
+.button-link:hover,
+.hidden-link:hover {
   text-decoration: none;
+  color: #212529;
+}
+
+.hidden-link {
+  color: #212529;
 }
 
 Button {
