@@ -50,7 +50,7 @@ class VehicleOverview extends Component
       return (
         <Col key='new' sm>
           <Card className="vehicle-col">
-            <Link to="/new" className="hidden-link" style={{'margin-top': '15px'}}>
+            <Link to="/new" className="hidden-link" style={{'marginTop': '15px'}}>
               <Card.Body>
                 <h1 className="text-center"><FontAwesomeIcon className="text-muted" icon={ faPlus } /></h1>
               </Card.Body>

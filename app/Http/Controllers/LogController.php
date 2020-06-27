@@ -32,6 +32,7 @@ class LogController extends Controller
         $log->user()->associate($user);
         $log->vehicle()->associate($vehicle);
         $log->save();
+        $vehicle->recalcStats();
         
         return response()->json(['success' => true], 201);
     }
@@ -60,6 +61,9 @@ class LogController extends Controller
         $log->distance = $request->distance;
         $log->save();
         
+        $vehicle = $log->vehicle->get();
+        $vehicle->recalcStats();
+        
         return response()->json(['success' => true], 201);
     }
     
@@ -74,7 +78,11 @@ class LogController extends Controller
             $log = $user->adminVehicles()->logs()->findOrFail($id);
         }
         
+        $vehicle = $log->vehicle->get();
         $log->delete();
+        
+        $vehicle->recalcStats();
+        
         return response()->json(['success' => true], 201);
     }
 }

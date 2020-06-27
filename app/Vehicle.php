@@ -17,4 +17,20 @@ class Vehicle extends Model
     {
         return $this->hasMany('App\Log');
     }
+    
+    
+    public function recalcStats()
+    {
+        $logs = $this->logs()->get();
+        $this->sum_distance = 0;
+        $this->sum_time = 0;
+        $this->drives = count($logs);
+        
+        foreach($logs as $l) {
+            $this->sum_distance += $l->distance;
+            $this->sum_time += $l->time;
+        }
+        
+        $this->save();
+    }
 }

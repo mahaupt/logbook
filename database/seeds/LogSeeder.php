@@ -16,6 +16,7 @@ class LogSeeder extends Seeder
         foreach($vehicles as $v) {
             for ($i=0; $i < 50; $i++) {
                 $log = new App\Log;
+                $log->date = now();
                 $log->start = Str::random(3);
                 $log->finish = Str::random(3);
                 $log->time = rand(10,100);
@@ -24,6 +25,8 @@ class LogSeeder extends Seeder
                 $log->vehicle()->associate($v);
                 $log->save();
             }
+            
+            $v->recalcStats();
         }
     }
 }

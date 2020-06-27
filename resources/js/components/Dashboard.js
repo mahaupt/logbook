@@ -5,6 +5,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStream } from '@fortawesome/free-solid-svg-icons'
 import VehicleOverview from './VehicleOverview'
+import UserLogList from './UserLogList'
 import Vehicle from './Vehicle'
 
 
@@ -65,7 +66,11 @@ class Dashboard extends Component {
                   <Route exact path='/' 
                       render={
                           (props) => 
-                          <VehicleOverview {...props} vehicles={this.state.vehicles} />
+                          <>
+                            <VehicleOverview {...props} vehicles={this.state.vehicles} />
+                            <br />
+                            <UserLogList {...props} vehicles={this.state.vehicles} />
+                          </>
                       } 
                   />
               <Route path='/vehicle/:id' 

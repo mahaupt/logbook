@@ -29,7 +29,8 @@ class VehicleController extends Controller
     public function show(Request $request, $id)
     {
         $user = $request->user();
-        return response()->json($user->vehicles()->findOrFail($id), 200);
+        $vehicle = $user->vehicles()->findOrFail($id);
+        return response()->json($vehicle, 200);
     }
     
     public function edit(Request $request, $id)
