@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHashtag, faExpandAlt, faStopwatch, faBicycle } from '@fortawesome/free-solid-svg-icons'
+import VehicleLogList from './VehicleLogList'
 
 class Vehicle extends Component
 {
@@ -12,14 +13,14 @@ class Vehicle extends Component
         this.state = {
             id: this.props.match.params.id, 
             vehicle: {}, 
-            log: {}
+            logs: []
         }
     }
     
     componentDidMount()
     {
         this.loadVehicle();
-        this.loadLog();
+        this.loadLogs();
     }
     
     loadVehicle() 
@@ -28,18 +29,18 @@ class Vehicle extends Component
             .then(response => {
                 this.setState({
                     vehicle: response.data
-                })
+                });
             })
             .catch(error => {
                 alert(error);
             });
     }
     
-    loadLog() {
+    loadLogs() {
         axios.get('/api/logs/' + this.state.id)
             .then(response => {
                 this.setState({
-                    log: response.data
+                    logs: response.data
                 })
             })
             .catch(error => {
@@ -48,6 +49,9 @@ class Vehicle extends Component
     }
     
     render () {
+        var sum_time_h = Math.floor(this.state.vehicle.sum_time/60);
+        var sum_time_m = this.state.vehicle.sum_time - sum_time_h*60;
+        
         return (
           <>
             <Row>
@@ -74,12 +78,13 @@ class Vehicle extends Component
                       &nbsp;&nbsp;
                       Distanz: <FontAwesomeIcon className="text-muted" icon={ faExpandAlt } /> {this.state.vehicle.sum_distance} km
                       &nbsp;&nbsp;
-                      Fahrzeit: <FontAwesomeIcon className="text-muted" icon={ faStopwatch } /> {this.state.vehicle.sum_time} h
+                      Fahrzeit: <FontAwesomeIcon className="text-muted" icon={ faStopwatch } /> {sum_time_h}:{sum_time_m} h
                     </Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
             </Row>
+            <VehicleLogList logs={this.state.logs} />
           </>
         )
     }

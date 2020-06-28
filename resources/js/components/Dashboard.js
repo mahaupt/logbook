@@ -7,6 +7,7 @@ import { faStream } from '@fortawesome/free-solid-svg-icons'
 import VehicleOverview from './VehicleOverview'
 import UserLogList from './UserLogList'
 import Vehicle from './Vehicle'
+import VehicleEdit from './VehicleEdit'
 
 
 class Dashboard extends Component {
@@ -55,7 +56,7 @@ class Dashboard extends Component {
                 <Col>
                   <h1><FontAwesomeIcon className="brand-icon" icon={ faStream } /> Logbook</h1>
                   <h5>
-                      Hallo {this.props.user.name}
+                      Hallo {this.props.user.name}{' '}
                       <Button variant="outline-secondary" size="sm" onClick={this.logout}>Ausloggen</Button>
                   </h5>
                 </Col>
@@ -73,12 +74,24 @@ class Dashboard extends Component {
                           </>
                       } 
                   />
-              <Route path='/vehicle/:id' 
+                  <Route path='/vehicle/:id' 
+                          render={
+                              (props) => 
+                              <Vehicle {...props} />
+                          } 
+                      />
+                  <Route path='/new'
                       render={
                           (props) => 
-                          <Vehicle {...props} />
+                          <VehicleEdit {...props} />
                       } 
-                  />
+                      />
+                  <Route path='/edit/:edit_id'
+                      render={
+                          (props) => 
+                          <VehicleEdit {...props} />
+                      } 
+                      />
                 </Switch>
               </BrowserRouter>
             </Container>

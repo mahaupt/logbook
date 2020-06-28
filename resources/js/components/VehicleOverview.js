@@ -16,9 +16,12 @@ class VehicleOverview extends Component
     renderContainer (vehicle) {
         var linkpath = "/vehicle/" + vehicle.id;
         
+        var sum_time_h = Math.floor(vehicle.sum_time/60);
+        var sum_time_m = vehicle.sum_time - sum_time_h*60;
+        
         return (
             
-            <Col key={vehicle.id} sm>
+            <Col key={vehicle.id} xs="12" sm="6" style={{marginBottom: '15px'}}>
               <Card className="vehicle-col">
                 <Link to={linkpath} className="hidden-link">
                   <Card.Body>
@@ -35,7 +38,7 @@ class VehicleOverview extends Component
                       &nbsp;&nbsp;
                       <FontAwesomeIcon className="text-muted" icon={ faExpandAlt } /> {vehicle.sum_distance} km
                       &nbsp;&nbsp;
-                      <FontAwesomeIcon className="text-muted" icon={ faStopwatch } /> {vehicle.sum_time} h
+                      <FontAwesomeIcon className="text-muted" icon={ faStopwatch } /> {sum_time_h}:{sum_time_m} h
                     </Card.Text>
                   </Card.Body>
                 </Link>
@@ -48,7 +51,7 @@ class VehicleOverview extends Component
     renderNewBikeButton()
     {
       return (
-        <Col key='new' sm>
+        <Col key='new' xs="12" sm="6">
           <Card className="vehicle-col">
             <Link to="/new" className="hidden-link" style={{'marginTop': '15px'}}>
               <Card.Body>

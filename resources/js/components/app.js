@@ -75,10 +75,10 @@ class App extends Component
             return (
                 <BrowserRouter>
                   <Switch>
-                    <Route exact path='/' 
-                        render={(props) => <Login {...props} onAuth={this.authCallback} />} />
                     <Route path='/register' 
                         render={(props) => <Register {...props} onAuth={this.authCallback} />} />
+                    <Route 
+                        render={(props) => <Login {...props} onAuth={this.authCallback} />} />
                   </Switch>
                 </BrowserRouter>
             );

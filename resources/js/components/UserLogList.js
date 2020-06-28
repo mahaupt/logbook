@@ -19,19 +19,19 @@ class UserLogList extends Component
     }
     
     indexVehicles(vehicles)
-    {    
-        for(var i in vehicles) {
-            var vehicle = vehicles[i];
-            this.setState((state, props) => {
+    {   
+        this.setState((state, props) => {
+            for(var i in vehicles) {
+                var vehicle = vehicles[i];
                 state.vehicles[vehicle.id] = vehicle.name;
-                return state;
-            })
-        }
+            }
+            return state;
+        });
     }
     
     componentDidUpdate(prevProps)
     {
-        if (prevProps.vehicles.length !== this.props.vehicles.length) {
+        if (Object.keys(this.state.vehicles).length !== this.props.vehicles.length) {
             this.indexVehicles(this.props.vehicles);
         }
     }
