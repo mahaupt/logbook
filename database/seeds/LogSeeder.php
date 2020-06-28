@@ -11,6 +11,8 @@ class LogSeeder extends Seeder
      */
     public function run()
     {
+        App\Log::truncate();
+        
         //
         $vehicles = App\Vehicle::all();
         foreach($vehicles as $v) {

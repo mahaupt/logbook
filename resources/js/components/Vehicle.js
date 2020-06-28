@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHashtag, faExpandAlt, faStopwatch, faBicycle } from '@fortawesome/free-solid-svg-icons'
@@ -12,15 +12,31 @@ class Vehicle extends Component
         
         this.state = {
             id: this.props.match.params.id, 
+            redirect: null,
             vehicle: {}, 
             logs: []
         }
+        
+        this.deleteVehicle = this.deleteVehicle.bind(this);
     }
     
     componentDidMount()
     {
         this.loadVehicle();
         this.loadLogs();
+    }
+    
+    deleteVehicle()
+    {
+        axios.delete('/api/vehicle/' + this.state.id)
+            .then(response => {
+                this.setState({
+                    redirect: "/"
+                })
+            })
+            .catch(error => {
+                alert(error);
+            });
     }
     
     loadVehicle() 
@@ -52,13 +68,21 @@ class Vehicle extends Component
         var sum_time_h = Math.floor(this.state.vehicle.sum_time/60);
         var sum_time_m = this.state.vehicle.sum_time - sum_time_h*60;
         
+        if (this.state.redirect) {
+            return <Redirect to={this.state.redirect} />
+        }
+        
         return (
           <>
             <Row>
               <Col>
                 <Link to="/">
-                  <Button>Zurück</Button>
-                </Link>
+                  <Button variant="primary">Zurück</Button>
+                </Link>{' '}
+                <Link to={"/edit/" + this.state.id }>
+                  <Button variant="secondary">Bearbeiten</Button>
+                </Link>{' '}
+                <Button variant="danger" onClick={this.deleteVehicle}>Löschen</Button>
               </Col>
             </Row>
             <Row>

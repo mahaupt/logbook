@@ -8,6 +8,7 @@ import VehicleOverview from './VehicleOverview'
 import UserLogList from './UserLogList'
 import Vehicle from './Vehicle'
 import VehicleEdit from './VehicleEdit'
+import LogEdit from './LogEdit'
 
 
 class Dashboard extends Component {
@@ -19,6 +20,7 @@ class Dashboard extends Component {
         }
         
         this.logout = this.logout.bind(this);
+        this.loadVehicles = this.loadVehicles.bind(this);
     }
     
     logout()
@@ -35,7 +37,12 @@ class Dashboard extends Component {
     
     componentDidMount() 
     {
+        this.loadVehicles();
         
+    }
+    
+    loadVehicles()
+    {
         axios.get('/api/vehicles')
             .then(response => {
                 this.setState({
@@ -83,13 +90,25 @@ class Dashboard extends Component {
                   <Route path='/new'
                       render={
                           (props) => 
-                          <VehicleEdit {...props} />
+                          <VehicleEdit {...props} refreshCallback={this.loadVehicles} />
                       } 
                       />
                   <Route path='/edit/:edit_id'
                       render={
                           (props) => 
-                          <VehicleEdit {...props} />
+                          <VehicleEdit {...props} refreshCallback={this.loadVehicles} />
+                      } 
+                      />
+                  <Route path='/newlog/:vehicle_id'
+                      render={
+                          (props) => 
+                          <LogEdit {...props} refreshCallback={this.loadVehicles} />
+                      } 
+                      />
+                  <Route path='/editlog/:log_id'
+                      render={
+                          (props) => 
+                          <LogEdit {...props} refreshCallback={this.loadVehicles} />
                       } 
                       />
                 </Switch>

@@ -47,7 +47,9 @@ class VehicleController extends Controller
     public function delete(Request $request, $id)
     {
         $user = $request->user();
-        $user->adminVehicles()->findOrFail($id)->delete();
+        $vehicle = $user->adminVehicles()->findOrFail($id);
+        $vehicle->logs()->delete();
+        $vehicle->delete();
         return response()->json(['success' => true], 201);
     }
 }

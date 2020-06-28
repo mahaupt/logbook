@@ -13,6 +13,8 @@ class VehicleSeeder extends Seeder
     
     public function run()
     {
+        App\Vehicle::truncate();
+        
         //
         $admin = App\User::where('email', 'admin@mail.net')->firstOrFail();
         $user1 = App\User::where('email', 'user1@mail.net')->firstOrFail();

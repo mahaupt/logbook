@@ -1,71 +1,28 @@
 import React, { Component } from 'react'
+import DateTime from 'react-datetime'
 import { Link, Redirect } from "react-router-dom";
 import { Col, Row, Form, Button } from 'react-bootstrap'
 import axios from 'axios'
 
-class VehicleEdit extends Component
-{
+class LogEdit extends Component {
     constructor (props) {
         super(props);
+        
+        var d = new Date();
+        var dstring = d.getDate() + "-" + d.getMonth() + "-" + d.getFullYear();
         
         this.state = {
             edit_id: null,
             redirect: null,
-            name: '',
-            bike_id: ''
+            date: dstring,
+            start: '',
+            finish: '',
+            time: 0,
+            distance: 0.0,
         }
         
         this.handleChange = this.handleChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-    }
-    
-    componentDidMount() {
-        if (this.props.match.params.edit_id) {
-            this.setState({
-                edit_id: this.props.match.params.edit_id
-            });
-        } else {
-            return;
-        }
-        
-        axios.get('/api/vehicle/' + this.props.match.params.edit_id)
-            .then(response => {
-                this.setState({
-                    name: response.data.name,
-                    bike_id: response.data.bike_id
-                })
-            })
-            .catch(error => {
-                alert(error)
-            });
-    }
-    
-    onSubmit(event) {
-        event.preventDefault();
-        
-        const details = {
-            name: this.state.name,
-            bike_id: this.state.bike_id
-        }
-        
-        var submit_fct = axios.put;
-        var submit_url = '/api/vehicle';
-        var redirect_link = '/';
-        
-        if (this.state.edit_id) {
-            submit_fct = axios.post;
-            submit_url = submit_url + '/' + this.state.edit_id;
-            redirect_link = '/vehicle/' +  this.state.edit_id;
-        }
-        
-        submit_fct(submit_url, details)
-            .then(response => {
-                this.setState({ redirect: redirect_link });
-                this.props.refreshCallback();
-            })
-            .catch(error => {
-                alert(error);
-            });
     }
     
     handleChange(event) {
@@ -74,16 +31,19 @@ class VehicleEdit extends Component
         })
     }
     
+    onSubmit() {
+        
+    }
+    
+    
     render () {
         if (this.state.redirect) {
             return <Redirect to={this.state.redirect} />
         }
         
-        var submit_text = "Fahrzeug hinzufügen";
-        var cancel_link = "/";
+        var submit_text = "Eintrag hinzufügen";
         if (this.state.edit_id) {
             submit_text = "Speichern";
-            cancel_link = "/vehicle/" + this.state.edit_id;
         }
         
         
@@ -94,6 +54,15 @@ class VehicleEdit extends Component
             <Col>
             <Form onSubmit={this.onSubmit}>
               <Form.Group controlId="formBasicName">
+                <DateTime 
+                    locale="de"
+                    name="date"
+                    dateFormat="DD-MM-YYYY"
+                    timeFormat={false}
+                    onChange={this.handleChange}
+                    value={this.state.date} 
+                />
+                
                 <Form.Label>Name des Fahrzeugs</Form.Label>
                 <Form.Control value={this.state.name} type="text" name="name" placeholder="Name" onChange={this.handleChange} required />
                 <Form.Text className="text-muted">
@@ -112,7 +81,7 @@ class VehicleEdit extends Component
               <Button variant="primary" type="submit">
                 {submit_text}
               </Button>{' '}
-              <Link to={cancel_link}>
+              <Link to='/'>
                   <Button variant="secondary">
                     Abbrechen
                   </Button>
@@ -122,6 +91,8 @@ class VehicleEdit extends Component
             </Row>
         );
     }
+    
+    
 }
 
-export default VehicleEdit
+export default LogEdit;
