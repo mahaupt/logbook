@@ -1,20 +1,22 @@
 import React, { Component } from 'react'
-import DateTime from 'react-datetime'
+import DatePicker from 'react-datepicker'
 import { Link, Redirect } from "react-router-dom";
 import { Col, Row, Form, Button } from 'react-bootstrap'
 import axios from 'axios'
+import "react-datepicker/dist/react-datepicker.css";
+import { registerLocale, setDefaultLocale } from  "react-datepicker";
+import de from 'date-fns/locale/de';
 
 class LogEdit extends Component {
     constructor (props) {
         super(props);
         
-        var d = new Date();
-        var dstring = d.getDate() + "-" + d.getMonth() + "-" + d.getFullYear();
+        registerLocale('de', de);
         
         this.state = {
             edit_id: null,
             redirect: null,
-            date: dstring,
+            date: new Date(),
             start: '',
             finish: '',
             time: 0,
@@ -22,12 +24,19 @@ class LogEdit extends Component {
         }
         
         this.handleChange = this.handleChange.bind(this);
+        this.handleChangeDate = this.handleChangeDate.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
     
     handleChange(event) {
         this.setState({
           [event.target.name]: event.target.value
+        })
+    }
+    
+    handleChangeDate(date) {
+        this.setState({
+          date: date
         })
     }
     
@@ -53,30 +62,55 @@ class LogEdit extends Component {
             <Row>
             <Col>
             <Form onSubmit={this.onSubmit}>
-              <Form.Group controlId="formBasicName">
-                <DateTime 
-                    locale="de"
-                    name="date"
-                    dateFormat="DD-MM-YYYY"
-                    timeFormat={false}
-                    onChange={this.handleChange}
-                    value={this.state.date} 
+              <Form.Group controlId="formBasicDate">
+                <Form.Label>Datum</Form.Label><br />
+                <DatePicker 
+                    name="date" 
+                    selected={this.state.date} 
+                    onChange={this.handleChangeDate} 
+                    locale="de" 
+                    dateFormat="dd-MM-yyyy"
                 />
+              </Form.Group>
                 
-                <Form.Label>Name des Fahrzeugs</Form.Label>
-                <Form.Control value={this.state.name} type="text" name="name" placeholder="Name" onChange={this.handleChange} required />
-                <Form.Text className="text-muted">
-                  Der Name oder die Beschreibung des Fahrzeugs
-                </Form.Text>
-              </Form.Group>
+              <Form.Row>
+                  <Form.Group as={Col} controlId="formBasicStart">
+                    <Form.Label>Start</Form.Label>
+                    <Form.Control value={this.state.name} type="text" name="start" placeholder="Zuhause" onChange={this.handleChange} required />
+                    <Form.Text className="text-muted">
+                      Der Startpunkt der Fahrt
+                    </Form.Text>
+                  </Form.Group>
+                  
+                  <Form.Group as={Col} controlId="formBasicFinish">
+                    <Form.Label>Ziel</Form.Label>
+                    <Form.Control value={this.state.bike_id} type="text" name="finish" placeholder="REWE" onChange={this.handleChange} required />
+                    <Form.Text className="text-muted">
+                      Das Ziel der Fahrt
+                    </Form.Text>
+                  </Form.Group>
+              </Form.Row>
               
-              <Form.Group controlId="formBasicBikeId">
-                <Form.Label>Name des Fahrzeugs</Form.Label>
-                <Form.Control value={this.state.bike_id} type="text" name="bike_id" placeholder="RH6728LZ" onChange={this.handleChange} required />
-                <Form.Text className="text-muted">
-                  Die Rahmennummer des Fahrzeugs
-                </Form.Text>
-              </Form.Group>
+              <Form.Row>
+                  <Form.Group as={Col} controlId="formBasicTime">
+                    <Form.Label>Zeit</Form.Label>
+                    <Form.Control value={this.state.name} type="number" name="time" placeholder="12" onChange={this.handleChange} required />
+                    <Form.Text className="text-muted">
+                      Die Fahrzeit in Minuten
+                    </Form.Text>
+                  </Form.Group>
+                  
+                  <Form.Group as={Col} controlId="formBasicDistance">
+                    <Form.Label>Distanz</Form.Label>
+                    <Form.Control value={this.state.bike_id} type="number" name="distance" placeholder="5,6" onChange={this.handleChange} required />
+                    <Form.Text className="text-muted">
+                      Die Distanz in km
+                    </Form.Text>
+                  </Form.Group>
+              </Form.Row>
+              
+              
+              
 
               <Button variant="primary" type="submit">
                 {submit_text}
