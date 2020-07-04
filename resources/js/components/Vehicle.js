@@ -4,6 +4,7 @@ import { Row, Col, Card, Button, Badge } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHashtag, faExpandAlt, faStopwatch, faBicycle } from '@fortawesome/free-solid-svg-icons'
 import VehicleLogList from './VehicleLogList'
+import UserManagement from './UserManagement'
 
 class Vehicle extends Component
 {
@@ -18,6 +19,7 @@ class Vehicle extends Component
         }
         
         this.deleteVehicle = this.deleteVehicle.bind(this);
+        this.loadLogs = this.loadLogs.bind(this);
     }
     
     componentDidMount()
@@ -79,10 +81,14 @@ class Vehicle extends Component
                 <Link to="/">
                   <Button variant="primary">Zurück</Button>
                 </Link>{' '}
+                {this.state.vehicle.pivot && this.state.vehicle.pivot.role == 'admin' &&
+                <>
                 <Link to={"/edit/" + this.state.id }>
                   <Button variant="secondary">Bearbeiten</Button>
                 </Link>{' '}
                 <Button variant="danger" onClick={this.deleteVehicle}>Löschen</Button>
+                </>
+                }
               </Col>
             </Row>
             <Row>
@@ -108,7 +114,11 @@ class Vehicle extends Component
                 </Card>
               </Col>
             </Row>
-            <VehicleLogList vehicleId={this.state.vehicle.id} logs={this.state.logs} />
+            {this.state.vehicle.pivot && this.state.vehicle.pivot.role == 'admin' &&
+            <UserManagement userId={this.state.vehicle.pivot.user_id} vehicleId={this.state.vehicle.id} />    
+            }
+            
+            <VehicleLogList refreshLogs={this.loadLogs} vehicleId={this.state.vehicle.id} logs={this.state.logs} />
           </>
         )
     }

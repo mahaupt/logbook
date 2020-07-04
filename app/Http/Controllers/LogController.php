@@ -13,7 +13,12 @@ class LogController extends Controller
     {
         $user = $request->user();
         $vehicle = $user->vehicles()->findOrFail($vid);
-        return response()->json($vehicle->logs()->get(), 200);
+        $logs = $vehicle->logs()->get();
+        foreach($logs as $i=>$l) {
+            $logs[$i]->editable = $vehicle->pivot->role == 'admin' || $l->user_id == $user->id;
+        }
+        
+        return response()->json($logs, 200);
     }
     
     public function index(Request $request)
@@ -113,13 +118,25 @@ class LogController extends Controller
         try {
             $log = $user->logs()->findOrFail($id);
         } catch(Exception $e) {
-            $log = $user->adminVehicles()->logs()->findOrFail($id);
+            $vehicles = $user->adminVehicles()->get();
+            foreach($vehicles as $v) {
+                $log = $v->logs->find($id);
+                if ($log) {
+                    break;
+                }
+            }
+            
+            if (!$log) {
+                return response()->json(['message' => 'No query results for model [App\\Log]'], 404);
+            }
         }
         
-        $vehicle = $log->vehicle->get();
+        $vehicle = $log->vehicle;
         $log->delete();
         
-        $vehicle->recalcStats();
+        if ($vehicle) {
+            $vehicle->recalcStats();
+        }
         
         return response()->json(['success' => true], 201);
     }

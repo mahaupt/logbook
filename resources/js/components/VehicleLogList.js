@@ -16,6 +16,18 @@ class VehicleLogList extends Component
         }
         
         this.renderLog = this.renderLog.bind(this);
+        this.deleteLog = this.deleteLog.bind(this);
+    }
+    
+    deleteLog(id)
+    {
+        axios.delete("/api/log/" + id)
+            .then(response => {
+                this.props.refreshLogs();
+            })
+            .catch(error => {
+                alert(error);
+            })
     }
     
     renderLog(log, vehicles)
@@ -35,8 +47,12 @@ class VehicleLogList extends Component
               <td>{log.time} min</td>
               <td>{log.distance} km</td>
               <td>
-                <Link to={"/editlog/" + log.id}><FontAwesomeIcon icon={ faEdit } /></Link> -&nbsp;
-                <Link to={"/editlog/" + log.id}><FontAwesomeIcon icon={ faTrashAlt } /></Link>
+                {log.editable && 
+                <>
+                  <Link to={"/editlog/" + log.id}><FontAwesomeIcon icon={ faEdit } /></Link> -&nbsp;
+                  <Link to="#" onClick={() => this.deleteLog(log.id)}><FontAwesomeIcon icon={ faTrashAlt } /></Link>
+                </>
+                }
               </td>
             </tr>
         )

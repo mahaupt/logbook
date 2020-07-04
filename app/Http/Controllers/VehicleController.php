@@ -39,6 +39,13 @@ class VehicleController extends Controller
         return response()->json($vehicle, 200);
     }
     
+    public function getUsers(Request $request, $id)
+    {
+        $user = $request->user();
+        $vehicle = $user->adminVehicles()->findOrFail($id);
+        return response()->json($vehicle->users, 200);
+    }
+    
     public function edit(Request $request, $id)
     {
         $request->validate([

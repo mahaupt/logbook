@@ -38,6 +38,7 @@ Route::group([
     Route::get('vehicle/{id}', 'VehicleController@show');
     Route::post('vehicle/{id}', 'VehicleController@edit');
     Route::delete('vehicle/{id}', 'VehicleController@delete');
+    Route::get('vehicle/{id}/users', 'VehicleController@getUsers');
 
     Route::get('vehicle/{vid}/logs', 'LogController@indexByVehicle');
     
