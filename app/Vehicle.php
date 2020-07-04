@@ -27,8 +27,8 @@ class Vehicle extends Model
         $this->drives = count($logs);
         
         foreach($logs as $l) {
-            $this->sum_distance += $l->distance;
-            $this->sum_time += $l->time;
+            $this->sum_distance += floatval($l->distance);
+            $this->sum_time += intval($l->time);
         }
         
         $this->save();

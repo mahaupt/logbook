@@ -105,7 +105,7 @@ class Dashboard extends Component {
                           <LogEdit {...props} refreshCallback={this.loadVehicles} />
                       } 
                       />
-                  <Route path='/editlog/:log_id'
+                  <Route path='/editlog/:edit_id'
                       render={
                           (props) => 
                           <LogEdit {...props} refreshCallback={this.loadVehicles} />

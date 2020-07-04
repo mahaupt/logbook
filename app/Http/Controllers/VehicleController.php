@@ -16,6 +16,11 @@ class VehicleController extends Controller
     
     public function create(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string',
+            'bike_id' => 'required|string'
+        ]);
+        
         $user = $request->user();
         $vehicle = new Vehicle;
         $vehicle->name = $request->name;
@@ -36,6 +41,11 @@ class VehicleController extends Controller
     
     public function edit(Request $request, $id)
     {
+        $request->validate([
+            'name' => 'required|string',
+            'bike_id' => 'required|string'
+        ]);
+        
         $user = $request->user();
         $vehicle = $user->adminVehicles()->findOrFail($id);
         $vehicle->name = $request->name;

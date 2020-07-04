@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import Datetime from 'react-datetime'
 import axios from 'axios'
-import { Container, Row, Col, Table } from 'react-bootstrap'
+import { Link } from "react-router-dom";
+import { Container, Row, Col, Table, Button } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit, faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 class VehicleLogList extends Component
 {
@@ -31,19 +34,28 @@ class VehicleLogList extends Component
               <td>{log.finish}</td>
               <td>{log.time} min</td>
               <td>{log.distance} km</td>
+              <td>
+                <Link to={"/editlog/" + log.id}><FontAwesomeIcon icon={ faEdit } /></Link> -&nbsp;
+                <Link to={"/editlog/" + log.id}><FontAwesomeIcon icon={ faTrashAlt } /></Link>
+              </td>
             </tr>
         )
     }
     
     render ()
     {
-        const { logs } = this.props;
+        const { logs, vehicleId } = this.props;
         
         return (
             <>
             <Row>
               <Col style={{marginTop: '15px'}}>
                 <h6>Die letzten Fahrten:</h6>
+                <Link to={"/newlog/" + vehicleId}>
+                  <Button variant="primary">
+                    Fahrt hinzufügen
+                  </Button>
+                </Link>
               </Col>
             </Row>
             <Row>
@@ -56,6 +68,7 @@ class VehicleLogList extends Component
                   <th>Ziel</th>
                   <th>Zeit</th>
                   <th>Distanz</th>
+                  <th>Aktion</th>
                 </tr>
               </thead>
               <tbody>

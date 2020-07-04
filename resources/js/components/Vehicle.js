@@ -108,7 +108,7 @@ class Vehicle extends Component
                 </Card>
               </Col>
             </Row>
-            <VehicleLogList logs={this.state.logs} />
+            <VehicleLogList vehicleId={this.state.vehicle.id} logs={this.state.logs} />
           </>
         )
     }

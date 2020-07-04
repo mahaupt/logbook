@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Log;
+use App\Vehicle;
 
 class LogController extends Controller
 {
@@ -22,13 +24,22 @@ class LogController extends Controller
     
     public function create(Request $request, $vid)
     {
+        $request->validate([
+            'date' => 'required|date_format:Y-m-d',
+            'start' => 'required|string',
+            'finish' => 'required|string', 
+            'time' => 'required|numeric'
+        ]);
+        
         $user = $request->user();
         $vehicle = $user->vehicles()->findOrFail($vid);
         $log = new Log;
+        $log->date = $request->date . ' 00:00:00';
         $log->start = $request->start;
         $log->finish = $request->finish;
-        $log->time = $request->time;
-        $log->distance = $request->distance;
+        $log->time = intval($request->time);
+        $dist = floatval(str_replace(",", ".", $request->distance));
+        $log->distance = $dist;
         $log->user()->associate($user);
         $log->vehicle()->associate($vehicle);
         $log->save();
@@ -38,31 +49,58 @@ class LogController extends Controller
     }
     
     public function show(Request $request, $id)
-    {
+    {        
         $user = $request->user();
-        $log = $user->vehicles()->logs()->findOrFail($id);
-        return response()->json($log, 200);
+        $vehicles = $user->vehicles()->get();
+        foreach($vehicles as $v) {
+            $log = $v->logs->find($id);
+            if ($log) {
+                return response()->json($log, 200);
+            }
+        }
+        return response()->json(['message' => 'No query results for model [App\\Log]'], 404);
     }
     
     public function edit(Request $request, $id)
     {
+        $request->validate([
+            'date' => 'required|date_format:Y-m-d',
+            'start' => 'required|string',
+            'finish' => 'required|string', 
+            'time' => 'required|numeric'
+        ]);
+        
         $user = $request->user();
         
         $log = null;
         try {
             $log = $user->logs()->findOrFail($id);
         } catch(Exception $e) {
-            $log = $user->adminVehicles()->logs()->findOrFail($id);
+            $vehicles = $user->adminVehicles()->get();
+            foreach($vehicles as $v) {
+                $log = $v->logs->find($id);
+                if ($log) {
+                    break;
+                }
+            }
+            
+            if (!$log) {
+                return response()->json(['message' => 'No query results for model [App\\Log]'], 404);
+            }
         }
         
+        $log->date = $request->date . ' 00:00:00';
         $log->start = $request->start;
         $log->finish = $request->finish;
-        $log->time = $request->time;
-        $log->distance = $request->distance;
+        $log->time = intval($request->time);
+        $dist = floatval(str_replace(",", ".", $request->distance));
+        $log->distance = $dist;
         $log->save();
         
-        $vehicle = $log->vehicle->get();
-        $vehicle->recalcStats();
+        $vehicle = $log->vehicle;
+        if ($vehicle) {
+            $vehicle->recalcStats();
+        }
         
         return response()->json(['success' => true], 201);
     }
