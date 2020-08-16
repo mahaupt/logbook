@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom'
 import axios from 'axios'
 import { Container, Row, Col, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -110,6 +110,12 @@ class Dashboard extends Component {
                           (props) => 
                           <LogEdit {...props} refreshCallback={this.loadVehicles} />
                       } 
+                      />
+                  <Route path='/register'
+                      render={
+                          (props) =>
+                          <Redirect to="/" />
+                      }
                       />
                 </Switch>
               </BrowserRouter>
