@@ -12,10 +12,16 @@ class UserManagement extends Component
         super(props);
         
         this.state = {
-            users: []
+            users: [], 
+            remaining_users: [], 
+            add_user: "-1",
+            add_user_role: "user"
         }
         
         this.renderUser = this.renderUser.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+        this.removeUser = this.removeUser.bind(this);
     }
     
     componentDidMount() {
@@ -30,6 +36,57 @@ class UserManagement extends Component
             .catch(error => {
                 alert(error);
             });
+            
+        axios.get("/api/vehicle/" + this.props.vehicleId + "/remaining_users")
+            .then(response => {
+                this.setState({
+                    remaining_users: response.data
+                })
+            })
+            .catch(error => {
+                alert(error);
+            });
+    }
+    
+    handleChange(event) {
+        this.setState({
+          [event.target.name]: event.target.value
+        })
+    }
+    
+    onSubmit(event)
+    {
+        event.preventDefault();
+        
+        if (this.state.add_user == -1) {
+            alert("Bitte wähle einen Benutzer aus!");
+            return;
+        }
+        
+        var data = {
+            'user_id': this.state.add_user,
+            'role': this.state.add_user_role
+        }
+        
+        axios.put("/api/vehicle/" + this.props.vehicleId + "/users", data)
+            .then(response => {
+                this.componentDidMount();
+            })
+            .catch(error => {
+                alert(error);
+            });    
+    }
+    
+    removeUser(userid)
+    {
+        
+        axios.delete("/api/vehicle/" + this.props.vehicleId + "/users?user_id=" + userid)
+            .then(response => {
+                this.componentDidMount();
+            })
+            .catch(error => {
+                alert(error);
+            });    
     }
     
     renderUser(user)
@@ -48,7 +105,7 @@ class UserManagement extends Component
               <Card>
                 <Card.Body>
                   <h6>{user.name} ({rolestr}){' - '}
-                    <Link to="#" onClick={() => this.deleteLog(log.id)}><FontAwesomeIcon icon={ faTrashAlt } /></Link>
+                    <Link to="#" onClick={() => this.removeUser(user.id)}><FontAwesomeIcon icon={ faTrashAlt } /></Link>
                   </h6>
                 </Card.Body>
               </Card>
@@ -57,7 +114,7 @@ class UserManagement extends Component
     }
     
     render() {
-        const { users } = this.state;
+        const { users, remaining_users } = this.state;
         
         return (
         <>
@@ -71,15 +128,21 @@ class UserManagement extends Component
               <Col key="u-+" xs="12" sm="6">
                 <Card>
                   <Card.Body>
-                      <Form.Control as="select">
-                        <option>Neuer Benutzer</option>
-                        <option>Dritet HJKLAS</option>
-                      </Form.Control>
-                      <Form.Control as="select">
-                        <option>Benutzer</option>
-                        <option>Admin</option>
-                      </Form.Control>
-                      <Button variant="primary">Hinzufügen</Button>
+                      <Form onSubmit={this.onSubmit}>
+                          <Form.Control as="select" name="add_user" value={this.state.add_user} onChange={this.handleChange}>
+                            <option value="-1">Neuer Benutzer</option>
+                            {remaining_users.map((user) => {
+                                return (
+                                    <option key={user.id} value={user.id}>{user.name}</option>
+                                )
+                            })}
+                          </Form.Control>
+                          <Form.Control as="select" name="add_user_role" value={this.state.add_user_role} onChange={this.handleChange}>
+                            <option value="user">Benutzer</option>
+                            <option value="admin">Admin</option>
+                          </Form.Control>
+                          <Button variant="primary" type="submit">Hinzufügen</Button>
+                      </Form>
                   </Card.Body>
                 </Card>
               </Col>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Vehicle;
+use App\User;
 
 class VehicleController extends Controller
 {
@@ -44,6 +45,57 @@ class VehicleController extends Controller
         $user = $request->user();
         $vehicle = $user->adminVehicles()->findOrFail($id);
         return response()->json($vehicle->users, 200);
+    }
+    
+    public function getRemainingUsers(Request $request, $id)
+    {
+        $user = $request->user();
+        $vehicle = $user->adminVehicles()->findOrFail($id);
+        $vehicle_users = $vehicle->users;
+        $remaining = User::whereNotIn('id', $vehicle_users->pluck('id')) // exclude already followed
+                        ->where('id', '<>', $user->id) // and the user himself
+                        ->get();
+                        
+        return response()->json($remaining, 200);
+    }
+    
+    public function addUser(Request $request, $id)
+    {
+        $request->validate([
+            'user_id' => 'required|numeric',
+            'role' => 'required|in:user,admin'
+        ]);
+        
+        $user = $request->user();
+        $vehicle = $user->adminVehicles()->findOrFail($id);
+        $add_user = User::findOrFail($request->user_id);
+        $add_user->vehicles()->attach($vehicle, ['role' => $request->role]);
+    }
+    
+    public function editUser(Request $request, $id)
+    {
+        $request->validate([
+            'user_id' => 'required|numeric',
+            'role' => 'required|in:user,admin'
+        ]);
+        
+        $user = $request->user();
+        $vehicle = $user->adminVehicles()->findOrFail($id);
+        $add_user = User::findOrFail($request->user_id);
+        $add_user->vehicles()->detach($vehicle);
+        $add_user->vehicles()->attach($vehicle, ['role' => $request->role]);
+    }
+    
+    public function removeUser(Request $request, $id)
+    {
+        $request->validate([
+            'user_id' => 'required|numeric'
+        ]);
+        
+        $user = $request->user();
+        $vehicle = $user->adminVehicles()->findOrFail($id);
+        $add_user = User::findOrFail($request->user_id);
+        $add_user->vehicles()->detach($vehicle);
     }
     
     public function edit(Request $request, $id)

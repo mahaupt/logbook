@@ -39,6 +39,10 @@ Route::group([
     Route::post('vehicle/{id}', 'VehicleController@edit');
     Route::delete('vehicle/{id}', 'VehicleController@delete');
     Route::get('vehicle/{id}/users', 'VehicleController@getUsers');
+    Route::put('vehicle/{id}/users', 'VehicleController@addUser');
+    Route::post('vehicle/{id}/users', 'VehicleController@editUser');
+    Route::delete('vehicle/{id}/users', 'VehicleController@removeUser');
+    Route::get('vehicle/{id}/remaining_users', 'VehicleController@getRemainingUsers');
 
     Route::get('vehicle/{vid}/logs', 'LogController@indexByVehicle');
     
