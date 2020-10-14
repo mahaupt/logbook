@@ -6,6 +6,7 @@ Logbook ist ein Online Fahrtenbuch. Ein Projekt zum Lernen von React.js und hybr
 
 git clone ...  
 copy .env.example to .env and setup the database conenction  
+composer install
 npm install  
 ./artisan migrate:install  
 ./artisan passport:install  
