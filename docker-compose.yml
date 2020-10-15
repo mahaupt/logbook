@@ -1,5 +1,35 @@
 version: "3"
 services:
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: logbook-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - docroot:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d
+#    networks:
+#      - logbooknetwork
+      
+#  mysql:
+#    image: mysql:5.7
+#    container_name: mysql
+#    restart: unless-stopped
+#    volumes:
+#      - dbdata:/var/lib/mysql
+#    environment:
+#      MYSQL_DATABASE: logbook
+#      MYSQL_ROOT_PASSWORD: logbook
+#      MYSQL_PASSWORD: logbook
+#      MYSQL_USER: logbook
+#      SERVICE_TAGS: dev
+#      SERVICE_NAME: mysql
+#    networks:
+#      - logbooknetwork
+      
   app:
     build:
       context: ./
@@ -12,40 +42,17 @@ services:
       SERVICE_TAGS: dev
     working_dir: /var/www
     volumes:
-      - ./:/var/www
-    networks:
-      - logbook-network
+      - docroot:/var/www
+#    networks:
+#      - logbooknetwork
+      
+      
+##Docker Networks
+#networks:
+#  logbooknetwork:
+#    driver: bridge
 
-  #Nginx Service
-  webserver:
-    image: nginx:alpine
-    container_name: logbook-nginx
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./:/var/www
-      - ./docker-compose/nginx:/etc/nginx/conf.d
-    networks:
-      - logbook-network
-      
-  db:
-    image: mysql:5.7
-    container_name: logbook-db
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
-    networks:
-      - logbook-network
-      
-      
-#Docker Networks
-networks:
-  logbook-network:
-    driver: bridge
+#connected volumes
+volumes:
+  docroot:
+    driver: local
