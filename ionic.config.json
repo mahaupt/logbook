@@ -1,0 +1,7 @@
+{
+  "name": "logbook",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

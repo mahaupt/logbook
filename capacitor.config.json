@@ -1,0 +1,8 @@
+{
+  "appId": "io.ionic.logbook",
+  "appName": "logbook",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "public",
+  "cordova": {}
+}
