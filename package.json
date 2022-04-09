@@ -37,7 +37,7 @@
         "@fortawesome/free-solid-svg-icons": "^5.15.1",
         "@fortawesome/react-fontawesome": "^0.1.14",
         "concurrently": "^6.0.0",
-        "moment": "^2.29.1",
+        "moment": "^2.29.2",
         "react-bootstrap": "^1.4.0",
         "react-datepicker": "^3.3.0",
         "react-datetime": "^3.0.4",
